@@ -6,7 +6,7 @@ import java.io.IOException;
 /**
  * Created by ghostflying on 3/22/15.
  */
-public class BatterySaverModeUtil {
+public class BatterySaverModeUtil extends BaseCommandUtil {
     private static String COMMAND_ENABLE = "settings put global low_power 1\n" +
             "am broadcast -a android.os.action.POWER_SAVE_MODE_CHANGED --ez mode true\n";
     private static String COMMAND_DISABLE = "settings put global low_power 0\n" +
@@ -18,18 +18,5 @@ public class BatterySaverModeUtil {
 
     public static void disable(){
         runCommandWithRoot(COMMAND_DISABLE);
-    }
-
-    private static void runCommandWithRoot(String command){
-        try{
-            Process p = Runtime.getRuntime().exec("su");
-            DataOutputStream os = new DataOutputStream(p.getOutputStream());
-            os.writeBytes(command);
-            os.writeBytes("exit\n");
-            os.flush();
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
     }
 }
