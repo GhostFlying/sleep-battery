@@ -4,4 +4,10 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="toolbar_elevation">5dp</dimen>
+
+    <dimen name="setting_keyline1">20dp</dimen>
+    <dimen name="setting_item_margin_vertical">20dp</dimen>
+    <dimen name="setting_icon_offset_value_width">30dp</dimen>
+    <dimen name="setting_item_separator_margin_horizon">10dp</dimen>
+    <dimen name="setting_item_title_text_size">16sp</dimen>
 </resources>

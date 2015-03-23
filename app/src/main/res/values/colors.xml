@@ -4,4 +4,8 @@
     <color name="primary">#FF5722</color>
     <color name="primary_dark">#E64A19</color>
     <color name="accent">#4FC3F7</color>
+    <color name="setting_group_title_text_color">@color/primary</color>
+    <color name="setting_item_bg">@color/background_material_light</color>
+    <color name="setting_item_pressed">#9E9E9E</color>
+    <color name="setting_item_title_text">#000</color>
 </resources>

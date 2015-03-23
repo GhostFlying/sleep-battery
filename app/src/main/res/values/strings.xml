@@ -4,6 +4,11 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
-    <string name="action_switch">Swicth</string>
+    <string name="action_switch">Switch</string>
 
+    <string name="setting_time">Time</string>
+    <string name="setting_start_time">Start time</string>
+    <string name="setting_end_time">End time</string>
+
+    <string name="default_start_time">24:00</string>
 </resources>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/setting_keyline1"
+        android:paddingRight="@dimen/setting_keyline1"
+        android:paddingTop="@dimen/setting_item_margin_vertical"
+        android:text="@string/setting_time"
+        android:textColor="@color/setting_group_title_text_color"/>
+
+    <LinearLayout
+        android:id="@+id/start_time"
+        android:background="@drawable/setting_item_bg"
+        android:paddingBottom="@dimen/setting_item_margin_vertical"
+        android:paddingLeft="@dimen/setting_keyline1"
+        android:paddingRight="@dimen/setting_keyline1"
+        android:paddingTop="@dimen/setting_item_margin_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/setting_start_time"
+            android:textColor="@color/setting_item_title_text"
+            android:textSize="@dimen/setting_item_title_text_size"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/default_start_time"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/setting_separate"/>
+
+    <LinearLayout
+        android:id="@+id/end_time"
+        android:background="@drawable/setting_item_bg"
+        android:paddingBottom="@dimen/setting_item_margin_vertical"
+        android:paddingLeft="@dimen/setting_keyline1"
+        android:paddingRight="@dimen/setting_keyline1"
+        android:paddingTop="@dimen/setting_item_margin_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/setting_end_time"
+            android:textColor="@color/setting_item_title_text"
+            android:textSize="@dimen/setting_item_title_text_size"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/default_start_time"/>
+
+    </LinearLayout>
+
+</LinearLayout>
