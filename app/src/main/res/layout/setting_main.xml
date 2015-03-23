@@ -3,4 +3,19 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/setting_time"/>
+
+            <include layout="@layout/setting_extra"/>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

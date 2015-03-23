@@ -10,11 +10,11 @@
         android:paddingLeft="@dimen/setting_keyline1"
         android:paddingRight="@dimen/setting_keyline1"
         android:paddingTop="@dimen/setting_item_margin_vertical"
-        android:text="@string/setting_time"
+        android:text="@string/setting_extra"
         android:textColor="@color/setting_group_title_text_color"/>
 
     <LinearLayout
-        android:id="@+id/start_time"
+        android:id="@+id/mode_switch"
         android:background="@drawable/setting_item_bg"
         android:paddingBottom="@dimen/setting_item_margin_vertical"
         android:paddingLeft="@dimen/setting_keyline1"
@@ -27,21 +27,21 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/setting_start_time"
+            android:text="@string/setting_mode"
             android:textColor="@color/setting_item_title_text"
             android:textSize="@dimen/setting_item_title_text_size"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/default_start_time"/>
+            android:text="@string/mode_battery_saver"/>
 
     </LinearLayout>
 
     <include layout="@layout/setting_separate"/>
 
     <LinearLayout
-        android:id="@+id/end_time"
+        android:id="@+id/available_days"
         android:background="@drawable/setting_item_bg"
         android:paddingBottom="@dimen/setting_item_margin_vertical"
         android:paddingLeft="@dimen/setting_keyline1"
@@ -54,14 +54,47 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/setting_end_time"
+            android:text="@string/setting_available_days"
             android:textColor="@color/setting_item_title_text"
             android:textSize="@dimen/setting_item_title_text_size"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/default_start_time"/>
+            android:text="@string/day_none"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/setting_separate"/>
+
+    <LinearLayout
+        android:id="@+id/snooze_if_active"
+        android:background="@drawable/setting_item_bg"
+        android:paddingBottom="@dimen/setting_item_margin_vertical"
+        android:paddingLeft="@dimen/setting_keyline1"
+        android:paddingRight="@dimen/setting_keyline1"
+        android:paddingTop="@dimen/setting_item_margin_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/setting_snooze"
+            android:textColor="@color/setting_item_title_text"
+            android:textSize="@dimen/setting_item_title_text_size"/>
+
+        <Space
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+
+        <CheckBox
+            android:theme="@style/AppTheme.CheckBox"
+            android:checked="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
