@@ -2,6 +2,7 @@ package com.ghostflying.autobatterysaver.fragment;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.os.Bundle;
 
 /**
  * Created by ghostflying on 3/24/15.
@@ -38,8 +39,8 @@ public abstract class BaseAlertDialogFragment extends DialogFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        public void onPositiveButtonClick(int value, int title);
-        public void onNegativeButtonClick(int value, int title);
+        public void onPositiveButtonClick(Bundle value, int title);
+        public void onNegativeButtonClick(Bundle value, int title);
     }
 
 }

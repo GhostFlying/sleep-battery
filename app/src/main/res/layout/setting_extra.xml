@@ -60,6 +60,7 @@
             android:textSize="@dimen/setting_item_title_text_size"/>
 
         <TextView
+            android:id="@+id/available_days_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/day_none"/>

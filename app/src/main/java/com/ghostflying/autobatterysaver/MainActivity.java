@@ -15,12 +15,14 @@ import android.widget.TextView;
 
 import com.ghostflying.autobatterysaver.fragment.BaseAlertDialogFragment;
 import com.ghostflying.autobatterysaver.fragment.BaseTimePickerDialog;
+import com.ghostflying.autobatterysaver.fragment.ChooseDialogFragment;
 import com.ghostflying.autobatterysaver.fragment.EndTimePicker;
-import com.ghostflying.autobatterysaver.fragment.SingleChooseDialogFragment;
 import com.ghostflying.autobatterysaver.fragment.StartTimePicker;
 import com.ghostflying.autobatterysaver.model.Time;
 import com.ghostflying.autobatterysaver.util.SettingUtil;
 import com.ghostflying.autobatterysaver.util.WorkingMode;
+
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -45,6 +47,8 @@ public class MainActivity extends ActionBarActivity
     TextView mEndTimeText;
     @InjectView(R.id.working_mode_text)
     TextView mWorkingModeText;
+    @InjectView(R.id.available_days_text)
+    TextView mAvailableDaysText;
 
     SwitchCompat mSwitch;
 
@@ -62,6 +66,7 @@ public class MainActivity extends ActionBarActivity
         mSnoozeIfActiveCheckBox.setChecked(SettingUtil.isSnoozeIfActive(this));
         setTime();
         setWorkingMode();
+        setAvailableDays();
     }
 
     private void setToolbar(){
@@ -88,6 +93,38 @@ public class MainActivity extends ActionBarActivity
 
     private void setWorkingMode(){
         mWorkingModeText.setText(SettingUtil.getWorkingMode(this).getStringRes());
+    }
+
+    private void setAvailableDays(){
+        String resultText = null;
+        boolean[] availableArray = getAvailableDaysArray();
+        String[] shortDaysOfWeek = getResources().getStringArray(R.array.short_days_array);
+        for (int i = 0; i < availableArray.length; i++){
+            if (availableArray[i]){
+                if (resultText == null){
+                    resultText = shortDaysOfWeek[i];
+                }
+                else {
+                    resultText += ", " + shortDaysOfWeek[i];
+                }
+            }
+        }
+        if (resultText == null)
+            resultText = getResources().getString(R.string.day_none);
+        mAvailableDaysText.setText(resultText);
+    }
+
+    private boolean[] getAvailableDaysArray(){
+        Map<String, Boolean> availableDays = SettingUtil.getAvailableDays(this);
+        String[] daysOfWeek = getResources().getStringArray(R.array.days_array);
+        boolean[] result = new boolean[daysOfWeek.length];
+        for (int i = 0; i < daysOfWeek.length; i++){
+            if (availableDays.get(daysOfWeek[i]))
+                result[i] = true;
+            else
+                result[i] = false;
+        }
+        return result;
     }
 
     @Override
@@ -132,7 +169,7 @@ public class MainActivity extends ActionBarActivity
                 endTimeDialog.show(getFragmentManager(), null);
                 break;
             case R.id.mode_switch:
-                DialogFragment dialogFragment = SingleChooseDialogFragment
+                DialogFragment dialogFragment = ChooseDialogFragment
                         .newInstance(
                                 R.string.mode_switch_dialog_title,
                                 R.array.mode_array,
@@ -140,7 +177,15 @@ public class MainActivity extends ActionBarActivity
                         );
                 dialogFragment.show(getFragmentManager(), null);
                 break;
-
+            case R.id.available_days:
+                DialogFragment dialogFragment1 = ChooseDialogFragment
+                        .newInstance(
+                                R.string.days_choose_dialog_title,
+                                R.array.days_array,
+                                getAvailableDaysArray()
+                        );
+                dialogFragment1.show(getFragmentManager(), null);
+                break;
         }
     }
 
@@ -155,15 +200,19 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
-    public void onPositiveButtonClick(int value, int title) {
+    public void onPositiveButtonClick(Bundle value, int title) {
         if (title == R.string.mode_switch_dialog_title){
-            SettingUtil.setWorkingMode(this, WorkingMode.values()[value]);
+            SettingUtil.setWorkingMode(this, WorkingMode.values()[value.getInt(ChooseDialogFragment.ARG_ITEM_CHECKED)]);
             setWorkingMode();
+        }
+        else if (title == R.string.days_choose_dialog_title){
+            SettingUtil.setAvailableDays(this, value.getBooleanArray(ChooseDialogFragment.ARG_ITEM_CHECKED));
+            setAvailableDays();
         }
     }
 
     @Override
-    public void onNegativeButtonClick(int value, int title) {
+    public void onNegativeButtonClick(Bundle value, int title) {
 
     }
 }

@@ -59,5 +59,6 @@
     <string name="positive_button">@android:string/ok</string>
     <string name="negative_button">@android:string/cancel</string>
     <string name="mode_switch_dialog_title">Choose mode</string>
+    <string name="days_choose_dialog_title">Available days</string>
 
 </resources>
