@@ -14,9 +14,11 @@
     <string name="setting_mode">Mode</string>
     <string name="mode_battery_saver">Battery saver</string>
     <string name="mode_airplane">Airplane</string>
+    <string name="mode_both">Both</string>
     <string-array name="mode_array">
         <item>@string/mode_battery_saver</item>
         <item>@string/mode_airplane</item>
+        <item>@string/mode_both</item>
     </string-array>
     <string name="setting_snooze">Snooze if device is active</string>
     <string name="setting_available_days">Available days</string>
@@ -53,4 +55,9 @@
         <item>@string/short_day_friday</item>
         <item>@string/short_day_saturday</item>
     </string-array>
+
+    <string name="positive_button">@android:string/ok</string>
+    <string name="negative_button">@android:string/cancel</string>
+    <string name="mode_switch_dialog_title">Choose mode</string>
+
 </resources>

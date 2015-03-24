@@ -16,6 +16,7 @@ public class SettingUtil {
     private static final String SETTING_START_TIME_MINUTE_NAME = "StartTimeMinute";
     private static final String SETTING_END_TIME_HOUR_NAME = "EndTimeHour";
     private static final String SETTING_END_TIME_MINUTE_NAME = "EndTimeMinute";
+    private static final String SETTING_WORKING_MODE_NAME = "WorkingMode";
 
     private static final boolean DEFAULT_ENABLE = false;
     private static final boolean DEFAULT_SNOOZE_IF_ACTIVE = true;
@@ -23,6 +24,7 @@ public class SettingUtil {
     private static final int DEFAULT_START_TIME_MINUTE = 0;
     private static final int DEFAULT_END_TIME_HOUR = 8;
     private static final int DEFAULT_END_TIME_MINUTE = 0;
+    private static final String DEFAULT_WORKING_MODE = WorkingMode.BATTERY_SAVER.name();
 
     public static boolean isEnable(Context context){
         return getPreferences(context).getBoolean(SETTING_ENABLE_NAME, DEFAULT_ENABLE);
@@ -68,6 +70,14 @@ public class SettingUtil {
                 .putInt(SETTING_END_TIME_HOUR_NAME, endTime.getHour())
                 .putInt(SETTING_END_TIME_MINUTE_NAME, endTime.getMinute())
                 .apply();
+    }
+
+    public static WorkingMode getWorkingMode(Context context){
+        return WorkingMode.valueOf(getPreferences(context).getString(SETTING_WORKING_MODE_NAME, DEFAULT_WORKING_MODE));
+    }
+
+    public static void setWorkingMode(Context context, WorkingMode mode){
+        getEditor(context).putString(SETTING_WORKING_MODE_NAME, mode.name()).apply();
     }
 
     private static SharedPreferences getPreferences(Context context){
