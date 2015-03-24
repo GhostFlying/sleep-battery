@@ -8,5 +8,5 @@
     <color name="setting_item_bg">@color/background_material_light</color>
     <color name="setting_item_pressed">#9E9E9E</color>
     <color name="setting_item_title_text">#000</color>
-    <color name="disable_overlay_color">#80EEEEEE</color>
+    <color name="disable_overlay_color">#90EEEEEE</color>
 </resources>
