@@ -91,6 +91,7 @@
             android:layout_height="match_parent"/>
 
         <CheckBox
+            android:id="@+id/snooze_if_active_checkbox"
             android:theme="@style/AppTheme.CheckBox"
             android:checked="true"
             android:layout_width="wrap_content"

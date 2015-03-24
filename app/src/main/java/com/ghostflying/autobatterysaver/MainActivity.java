@@ -1,26 +1,22 @@
 package com.ghostflying.autobatterysaver;
 
-import android.content.Context;
-import android.os.PowerManager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 
-import com.ghostflying.autobatterysaver.util.BatterySaverModeUtil;
 import com.ghostflying.autobatterysaver.util.SettingUtil;
-
-import java.io.DataOutputStream;
-import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -29,6 +25,8 @@ public class MainActivity extends ActionBarActivity {
     Toolbar mToolbar;
     @InjectView(R.id.disable_overlay)
     View mDisableOverlay;
+    @InjectView(R.id.snooze_if_active_checkbox)
+    CheckBox mSnoozeIfActiveCheckBox;
 
     SwitchCompat mSwitch;
 
@@ -43,6 +41,7 @@ public class MainActivity extends ActionBarActivity {
     private void initialView(){
         ButterKnife.inject(this);
         setToolbar();
+        mSnoozeIfActiveCheckBox.setChecked(SettingUtil.isSnoozeIfActive(this));
     }
 
     private void setToolbar(){
@@ -74,5 +73,19 @@ public class MainActivity extends ActionBarActivity {
         else {
             mDisableOverlay.setVisibility(View.VISIBLE);
         }
+    }
+
+    @OnClick ({R.id.start_time, R.id.end_time, R.id.mode_switch, R.id.available_days, R.id.snooze_if_active})
+    void onSettingItemClicked(View view){
+        switch (view.getId()){
+            case R.id.snooze_if_active:
+                mSnoozeIfActiveCheckBox.setChecked(!mSnoozeIfActiveCheckBox.isChecked());
+                break;
+        }
+    }
+
+    @OnCheckedChanged(R.id.snooze_if_active_checkbox)
+    void onCheckBoxCheckedChanged(CompoundButton buttonView, boolean isChecked){
+        SettingUtil.setSnoozeIfActive(this, isChecked);
     }
 }
