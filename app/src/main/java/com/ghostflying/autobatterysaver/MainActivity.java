@@ -1,5 +1,6 @@
 package com.ghostflying.autobatterysaver;
 
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SwitchCompat;
@@ -10,7 +11,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 
+import com.ghostflying.autobatterysaver.fragment.BaseTimePickerDialog;
+import com.ghostflying.autobatterysaver.fragment.EndTimePicker;
+import com.ghostflying.autobatterysaver.fragment.StartTimePicker;
+import com.ghostflying.autobatterysaver.model.Time;
 import com.ghostflying.autobatterysaver.util.SettingUtil;
 
 import butterknife.ButterKnife;
@@ -19,7 +25,8 @@ import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements BaseTimePickerDialog.TimePickerDialogInteraction {
+    private static final String TIME_TEMPLATE = "%02d:%02d";
 
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
@@ -27,6 +34,10 @@ public class MainActivity extends ActionBarActivity {
     View mDisableOverlay;
     @InjectView(R.id.snooze_if_active_checkbox)
     CheckBox mSnoozeIfActiveCheckBox;
+    @InjectView(R.id.start_time_text)
+    TextView mStartTimeText;
+    @InjectView(R.id.end_time_text)
+    TextView mEndTimeText;
 
     SwitchCompat mSwitch;
 
@@ -42,10 +53,29 @@ public class MainActivity extends ActionBarActivity {
         ButterKnife.inject(this);
         setToolbar();
         mSnoozeIfActiveCheckBox.setChecked(SettingUtil.isSnoozeIfActive(this));
+        setTime();
     }
 
     private void setToolbar(){
         setSupportActionBar(mToolbar);
+    }
+
+    private void setTime(){
+        setStartTime();
+        setEndTime();
+    }
+
+    private void setStartTime(){
+        Time startTime = SettingUtil.getStartTime(this);
+        mStartTimeText.setText(
+                String.format(TIME_TEMPLATE, startTime.getHour(), startTime.getMinute()));
+    }
+
+    private void setEndTime(){
+        Time endTime = SettingUtil.getEndTime(this);
+        mEndTimeText.setText(
+                String.format(TIME_TEMPLATE, endTime.getHour(), endTime.getMinute())
+        );
     }
 
     @Override
@@ -81,11 +111,24 @@ public class MainActivity extends ActionBarActivity {
             case R.id.snooze_if_active:
                 mSnoozeIfActiveCheckBox.setChecked(!mSnoozeIfActiveCheckBox.isChecked());
                 break;
+            case R.id.start_time:
+                DialogFragment startTimeDialog = new StartTimePicker();
+                startTimeDialog.show(getFragmentManager(), null);
+                break;
+            case R.id.end_time:
+                DialogFragment endTimeDialog = new EndTimePicker();
+                endTimeDialog.show(getFragmentManager(), null);
+                break;
         }
     }
 
     @OnCheckedChanged(R.id.snooze_if_active_checkbox)
     void onCheckBoxCheckedChanged(CompoundButton buttonView, boolean isChecked){
         SettingUtil.setSnoozeIfActive(this, isChecked);
+    }
+
+    @Override
+    public void onTimeSet(Time time) {
+        setTime();
     }
 }
