@@ -61,4 +61,8 @@
     <string name="mode_switch_dialog_title">Choose mode</string>
     <string name="days_choose_dialog_title">Available days</string>
 
+    <!-- Service -->
+    <string name="notification_title">Sleep detector is running</string>
+    <string name="notification_content">This will exit if you go to sleep.</string>
+
 </resources>
