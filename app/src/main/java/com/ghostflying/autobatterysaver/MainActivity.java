@@ -1,6 +1,9 @@
 package com.ghostflying.autobatterysaver;
 
+import android.app.AlarmManager;
 import android.app.DialogFragment;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -21,9 +24,11 @@ import com.ghostflying.autobatterysaver.fragment.EndTimePicker;
 import com.ghostflying.autobatterysaver.fragment.StartTimePicker;
 import com.ghostflying.autobatterysaver.model.Time;
 import com.ghostflying.autobatterysaver.service.UserDetectorService;
+import com.ghostflying.autobatterysaver.service.WorkService;
 import com.ghostflying.autobatterysaver.util.SettingUtil;
 import com.ghostflying.autobatterysaver.util.WorkingMode;
 
+import java.util.Calendar;
 import java.util.Map;
 
 import butterknife.ButterKnife;
@@ -34,7 +39,7 @@ import butterknife.OnClick;
 
 public class MainActivity extends ActionBarActivity
         implements BaseTimePickerDialog.TimePickerDialogInteraction,
-        BaseAlertDialogFragment.OnFragmentInteractionListener{
+        BaseAlertDialogFragment.OnFragmentInteractionListener {
     private static final String TIME_TEMPLATE = "%02d:%02d";
 
     @InjectView(R.id.toolbar)
@@ -60,10 +65,9 @@ public class MainActivity extends ActionBarActivity
         setContentView(R.layout.activity_main);
 
         initialView();
-        startService(new Intent(this, UserDetectorService.class));
     }
 
-    private void initialView(){
+    private void initialView() {
         ButterKnife.inject(this);
         setToolbar();
         mSnoozeIfActiveCheckBox.setChecked(SettingUtil.isSnoozeIfActive(this));
@@ -72,42 +76,71 @@ public class MainActivity extends ActionBarActivity
         setAvailableDays();
     }
 
-    private void setToolbar(){
+    private void setToolbar() {
         setSupportActionBar(mToolbar);
     }
 
-    private void setTime(){
+    private void setTime() {
         setStartTime();
         setEndTime();
     }
 
-    private void setStartTime(){
+    private void setStartAlarm() {
+        Intent startIntent = new Intent(this, WorkService.class);
+        startIntent.setAction(WorkService.ACTION_START);
+        Time startTime = SettingUtil.getStartTime(this);
+        setIntervalDayAlarm(startIntent, startTime);
+    }
+
+    private void setEndAlarm(){
+        Intent startIntent = new Intent(this, WorkService.class);
+        startIntent.setAction(WorkService.ACTION_STOP);
+        Time stopTime = SettingUtil.getEndTime(this);
+        setIntervalDayAlarm(startIntent, stopTime);
+    }
+
+    private void setIntervalDayAlarm(Intent serviceIntent, Time time){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, time.getHour());
+        calendar.set(Calendar.MINUTE, time.getMinute());
+        alarmManager.setInexactRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY,
+                PendingIntent.getService(this, 1, serviceIntent, 0)
+        );
+    }
+
+    private void setStartTime() {
         Time startTime = SettingUtil.getStartTime(this);
         mStartTimeText.setText(
                 String.format(TIME_TEMPLATE, startTime.getHour(), startTime.getMinute()));
+        setStartAlarm();
     }
 
-    private void setEndTime(){
+    private void setEndTime() {
         Time endTime = SettingUtil.getEndTime(this);
         mEndTimeText.setText(
                 String.format(TIME_TEMPLATE, endTime.getHour(), endTime.getMinute())
         );
+        setEndAlarm();
     }
 
-    private void setWorkingMode(){
+    private void setWorkingMode() {
         mWorkingModeText.setText(SettingUtil.getWorkingMode(this).getStringRes());
     }
 
-    private void setAvailableDays(){
+    private void setAvailableDays() {
         String resultText = null;
         boolean[] availableArray = getAvailableDaysArray();
         String[] shortDaysOfWeek = getResources().getStringArray(R.array.short_days_array);
-        for (int i = 0; i < availableArray.length; i++){
-            if (availableArray[i]){
-                if (resultText == null){
+        for (int i = 0; i < availableArray.length; i++) {
+            if (availableArray[i]) {
+                if (resultText == null) {
                     resultText = shortDaysOfWeek[i];
-                }
-                else {
+                } else {
                     resultText += ", " + shortDaysOfWeek[i];
                 }
             }
@@ -117,11 +150,11 @@ public class MainActivity extends ActionBarActivity
         mAvailableDaysText.setText(resultText);
     }
 
-    private boolean[] getAvailableDaysArray(){
+    private boolean[] getAvailableDaysArray() {
         Map<String, Boolean> availableDays = SettingUtil.getAvailableDays(this);
         String[] daysOfWeek = getResources().getStringArray(R.array.days_array);
         boolean[] result = new boolean[daysOfWeek.length];
-        for (int i = 0; i < daysOfWeek.length; i++){
+        for (int i = 0; i < daysOfWeek.length; i++) {
             if (availableDays.get(daysOfWeek[i]))
                 result[i] = true;
             else
@@ -135,7 +168,7 @@ public class MainActivity extends ActionBarActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
         MenuItem mSwitchItem = menu.findItem(R.id.action_switch);
-        mSwitch = (SwitchCompat)mSwitchItem.getActionView().findViewById(R.id.toolbar_switch);
+        mSwitch = (SwitchCompat) mSwitchItem.getActionView().findViewById(R.id.toolbar_switch);
         mSwitch.setChecked(SettingUtil.isEnable(this));
         setOverlay(mSwitch.isChecked());
         mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -148,18 +181,17 @@ public class MainActivity extends ActionBarActivity
         return true;
     }
 
-    private void setOverlay(boolean isEnable){
-        if (isEnable){
+    private void setOverlay(boolean isEnable) {
+        if (isEnable) {
             mDisableOverlay.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             mDisableOverlay.setVisibility(View.VISIBLE);
         }
     }
 
-    @OnClick ({R.id.start_time, R.id.end_time, R.id.mode_switch, R.id.available_days, R.id.snooze_if_active})
-    void onSettingItemClicked(View view){
-        switch (view.getId()){
+    @OnClick({R.id.start_time, R.id.end_time, R.id.mode_switch, R.id.available_days, R.id.snooze_if_active})
+    void onSettingItemClicked(View view) {
+        switch (view.getId()) {
             case R.id.snooze_if_active:
                 mSnoozeIfActiveCheckBox.setChecked(!mSnoozeIfActiveCheckBox.isChecked());
                 break;
@@ -193,7 +225,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     @OnCheckedChanged(R.id.snooze_if_active_checkbox)
-    void onCheckBoxCheckedChanged(CompoundButton buttonView, boolean isChecked){
+    void onCheckBoxCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         SettingUtil.setSnoozeIfActive(this, isChecked);
     }
 
@@ -204,11 +236,10 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onPositiveButtonClick(Bundle value, int title) {
-        if (title == R.string.mode_switch_dialog_title){
+        if (title == R.string.mode_switch_dialog_title) {
             SettingUtil.setWorkingMode(this, WorkingMode.values()[value.getInt(ChooseDialogFragment.ARG_ITEM_CHECKED)]);
             setWorkingMode();
-        }
-        else if (title == R.string.days_choose_dialog_title){
+        } else if (title == R.string.days_choose_dialog_title) {
             SettingUtil.setAvailableDays(this, value.getBooleanArray(ChooseDialogFragment.ARG_ITEM_CHECKED));
             setAvailableDays();
         }

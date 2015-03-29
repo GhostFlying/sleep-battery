@@ -17,8 +17,9 @@ import com.ghostflying.autobatterysaver.util.WorkingMode;
 import java.util.Date;
 
 public class WorkService extends IntentService {
-    private static final String ACTION_START = BuildConfig.APPLICATION_ID + ".START_SLEEP";
-    private static final String ACTION_STOP = BuildConfig.APPLICATION_ID + ".STOP_SLEEP";
+    public static final String ACTION_START = BuildConfig.APPLICATION_ID + ".START_SLEEP";
+    public static final String ACTION_STOP = BuildConfig.APPLICATION_ID + ".STOP_SLEEP";
+
     private static final long USER_INACTIVITY_THRESHOLD = 15L * 60L * 1000L;
     private static final long DELAYED_TIME_MILLISECONDS = 15L * 60L * 1000L;
     private static final int START_INTENT_REQUEST_CODE = 1;
@@ -33,7 +34,15 @@ public class WorkService extends IntentService {
             if (ACTION_START.equals(intent.getAction())) {
                 enableSleepModeIfNeeded();
             }
+            else if (ACTION_STOP.equals(intent.getAction())){
+                disableSleepModeIfNeeded();
+            }
         }
+    }
+
+    private void disableSleepModeIfNeeded(){
+        setAirplaneMode(false);
+        setBatterySaverMode(false);
     }
 
     private void enableSleepModeIfNeeded() {
