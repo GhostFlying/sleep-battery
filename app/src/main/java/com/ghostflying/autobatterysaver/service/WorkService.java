@@ -72,15 +72,16 @@ public class WorkService extends IntentService {
     }
 
     private void setDelayedAlarm() {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         long runTime = new Date().getTime() + DELAYED_TIME_MILLISECONDS;
         Intent workIntent = new Intent(this, WorkService.class);
         workIntent.setAction(ACTION_START);
-        alarmManager.set(
-                AlarmManager.RTC_WAKEUP,
-                runTime,
-                PendingIntent.getService(this, START_INTENT_REQUEST_CODE, workIntent, 0)
+        PendingIntent pendingIntent = PendingIntent.getService(
+                this,
+                START_INTENT_REQUEST_CODE,
+                workIntent,
+                0
         );
+        AlarmUtil.setAlarm(this, pendingIntent, runTime);
     }
 
     private void setBatterySaverMode(boolean mode) {

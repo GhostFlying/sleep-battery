@@ -25,6 +25,7 @@ import com.ghostflying.autobatterysaver.fragment.StartTimePicker;
 import com.ghostflying.autobatterysaver.model.Time;
 import com.ghostflying.autobatterysaver.service.UserDetectorService;
 import com.ghostflying.autobatterysaver.service.WorkService;
+import com.ghostflying.autobatterysaver.util.AlarmUtil;
 import com.ghostflying.autobatterysaver.util.SettingUtil;
 import com.ghostflying.autobatterysaver.util.WorkingMode;
 
@@ -84,40 +85,10 @@ public class MainActivity extends ActionBarActivity
         setStartTime();
         setEndTime();
     }
-
-    private void setStartAlarm() {
-        Intent startIntent = new Intent(this, WorkService.class);
-        startIntent.setAction(WorkService.ACTION_START);
-        Time startTime = SettingUtil.getStartTime(this);
-        setIntervalDayAlarm(startIntent, startTime);
-    }
-
-    private void setEndAlarm(){
-        Intent startIntent = new Intent(this, WorkService.class);
-        startIntent.setAction(WorkService.ACTION_STOP);
-        Time stopTime = SettingUtil.getEndTime(this);
-        setIntervalDayAlarm(startIntent, stopTime);
-    }
-
-    private void setIntervalDayAlarm(Intent serviceIntent, Time time){
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, time.getHour());
-        calendar.set(Calendar.MINUTE, time.getMinute());
-        alarmManager.setInexactRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY,
-                PendingIntent.getService(this, 1, serviceIntent, 0)
-        );
-    }
-
     private void setStartTime() {
         Time startTime = SettingUtil.getStartTime(this);
         mStartTimeText.setText(
                 String.format(TIME_TEMPLATE, startTime.getHour(), startTime.getMinute()));
-        setStartAlarm();
     }
 
     private void setEndTime() {
@@ -125,7 +96,6 @@ public class MainActivity extends ActionBarActivity
         mEndTimeText.setText(
                 String.format(TIME_TEMPLATE, endTime.getHour(), endTime.getMinute())
         );
-        setEndAlarm();
     }
 
     private void setWorkingMode() {
@@ -232,6 +202,8 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onTimeSet(Time time) {
         setTime();
+        AlarmUtil.setStartAlarm(this);
+        AlarmUtil.setEndAlarm(this);
     }
 
     @Override
