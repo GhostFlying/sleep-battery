@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 
+import com.ghostflying.autobatterysaver.BuildConfig;
 import com.ghostflying.autobatterysaver.R;
 
 import java.util.Date;
@@ -16,6 +18,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public class UserDetectorService extends Service {
     private static final int ONGOING_NOTIFICATION_ID = 1;
+    private static final String TAG = "UserDetectorService";
 
     public static Date lastScreenOffTime;
 
@@ -29,6 +32,9 @@ public class UserDetectorService extends Service {
 
     @Override
     public void onCreate(){
+        if (BuildConfig.DEBUG){
+            Log.d(TAG, "User detector is on");
+        }
         lastScreenOffTime = new Date();
         registerScreenOffReceiver();
         setForeground();
@@ -51,12 +57,18 @@ public class UserDetectorService extends Service {
     private BroadcastReceiver mScreenOffReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (BuildConfig.DEBUG){
+                Log.d(TAG, "screen off.");
+            }
             lastScreenOffTime = new Date();
         }
     };
 
     @Override
     public void onDestroy(){
+        if (BuildConfig.DEBUG){
+            Log.d(TAG, "User detector is off");
+        }
         stopForeground(true);
         unregisterReceiver(mScreenOffReceiver);
     }

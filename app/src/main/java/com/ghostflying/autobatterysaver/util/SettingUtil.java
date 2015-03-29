@@ -52,7 +52,7 @@ public class SettingUtil {
         SharedPreferences preferences = getPreferences(context);
         return new Time(
                 preferences.getInt(SETTING_START_TIME_HOUR_NAME, DEFAULT_START_TIME_HOUR),
-                preferences.getInt(SETTING_END_TIME_MINUTE_NAME, DEFAULT_START_TIME_MINUTE)
+                preferences.getInt(SETTING_START_TIME_MINUTE_NAME, DEFAULT_START_TIME_MINUTE)
         );
     }
 

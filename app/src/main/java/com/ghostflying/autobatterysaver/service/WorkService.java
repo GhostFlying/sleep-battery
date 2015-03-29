@@ -5,24 +5,31 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.util.Log;
 
 import com.ghostflying.autobatterysaver.BuildConfig;
+import com.ghostflying.autobatterysaver.model.Time;
 import com.ghostflying.autobatterysaver.util.AirplaneModeUtil;
+import com.ghostflying.autobatterysaver.util.AlarmUtil;
 import com.ghostflying.autobatterysaver.util.BatterySaverModeUtil;
 import com.ghostflying.autobatterysaver.util.SettingUtil;
 import com.ghostflying.autobatterysaver.util.WorkingMode;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class WorkService extends IntentService {
     public static final String ACTION_START = BuildConfig.APPLICATION_ID + ".START_SLEEP";
     public static final String ACTION_STOP = BuildConfig.APPLICATION_ID + ".STOP_SLEEP";
 
-    private static final long USER_INACTIVITY_THRESHOLD = 15L * 60L * 1000L;
-    private static final long DELAYED_TIME_MILLISECONDS = 15L * 60L * 1000L;
+    private static final long USER_INACTIVITY_THRESHOLD = 1L * 60L * 1000L;
+    private static final long DELAYED_TIME_MILLISECONDS = 1L * 60L * 1000L;
     private static final int START_INTENT_REQUEST_CODE = 1;
+
+    private static final String TAG = "WorkService";
 
     public WorkService() {
         super("WorkService");
@@ -30,6 +37,9 @@ public class WorkService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        if (BuildConfig.DEBUG){
+            Log.d(TAG, "Received intent: " + intent.toString());
+        }
         if (intent != null) {
             if (ACTION_START.equals(intent.getAction())) {
                 enableSleepModeIfNeeded();
@@ -41,6 +51,9 @@ public class WorkService extends IntentService {
     }
 
     private void disableSleepModeIfNeeded(){
+        if (BuildConfig.DEBUG){
+            Log.d(TAG, "disable sleep mode");
+        }
         setAirplaneMode(false);
         setBatterySaverMode(false);
     }
@@ -52,10 +65,16 @@ public class WorkService extends IntentService {
                 || lastScreenOffTime == null // this should not happen
                 || (new Date().getTime() - lastScreenOffTime.getTime()) < USER_INACTIVITY_THRESHOLD) {
             // screen is on or the user use the device before little time..
+            if (BuildConfig.DEBUG){
+                Log.d(TAG, "user is active");
+            }
             setDelayedAlarm();
             return;
         }
 
+        if (BuildConfig.DEBUG){
+            Log.d(TAG, "Sleep mode is on");
+        }
         WorkingMode mode = SettingUtil.getWorkingMode(this);
         switch (mode) {
             case BATTERY_SAVER:
