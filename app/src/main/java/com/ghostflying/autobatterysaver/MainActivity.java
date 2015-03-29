@@ -20,7 +20,7 @@ import com.ghostflying.autobatterysaver.fragment.ChooseDialogFragment;
 import com.ghostflying.autobatterysaver.fragment.EndTimePicker;
 import com.ghostflying.autobatterysaver.fragment.StartTimePicker;
 import com.ghostflying.autobatterysaver.model.Time;
-import com.ghostflying.autobatterysaver.service.WorkingService;
+import com.ghostflying.autobatterysaver.service.UserDetectorService;
 import com.ghostflying.autobatterysaver.util.SettingUtil;
 import com.ghostflying.autobatterysaver.util.WorkingMode;
 
@@ -60,7 +60,7 @@ public class MainActivity extends ActionBarActivity
         setContentView(R.layout.activity_main);
 
         initialView();
-        startService(new Intent(this, WorkingService.class));
+        startService(new Intent(this, UserDetectorService.class));
     }
 
     private void initialView(){

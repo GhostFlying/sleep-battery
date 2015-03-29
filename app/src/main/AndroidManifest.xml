@@ -18,7 +18,12 @@
         </activity>
 
         <service
-            android:name=".service.WorkingService"
+            android:name=".service.UserDetectorService"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
+        <service
+            android:name=".service.WorkService"
             android:enabled="true"
             android:exported="false" >
         </service>

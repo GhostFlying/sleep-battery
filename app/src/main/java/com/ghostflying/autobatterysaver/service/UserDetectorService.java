@@ -14,12 +14,12 @@ import com.ghostflying.autobatterysaver.R;
 import java.util.Date;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
-public class WorkingService extends Service {
+public class UserDetectorService extends Service {
     private static final int ONGOING_NOTIFICATION_ID = 1;
 
-    private Date lastScreenOffTime;
+    public static Date lastScreenOffTime;
 
-    public WorkingService() {
+    public UserDetectorService() {
     }
 
     @Override
@@ -45,16 +45,19 @@ public class WorkingService extends Service {
 
     private void registerScreenOffReceiver(){
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
-        registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                lastScreenOffTime = new Date();
-            }
-        }, filter);
+        registerReceiver(mScreenOffReceiver, filter);
     }
+
+    private BroadcastReceiver mScreenOffReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            lastScreenOffTime = new Date();
+        }
+    };
 
     @Override
     public void onDestroy(){
         stopForeground(true);
+        unregisterReceiver(mScreenOffReceiver);
     }
 }
