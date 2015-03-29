@@ -19,18 +19,28 @@ public class AlarmUtil {
     private static final int STOP_ACTION_PENDING_REQUEST_ID = 20;
     private static final int USER_DETECTOR_PENDING_REQUEST_ID = 30;
 
-    private static void setIntervalDayAlarm(Context context, PendingIntent intent, Time time){
+    private static boolean setIntervalDayAlarm(Context context, PendingIntent intent, Time time, boolean delayToNextDay){
+        boolean delay = false;
+
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, time.getHour());
         calendar.set(Calendar.MINUTE, time.getMinute());
+
+        if (delayToNextDay || calendar.getTimeInMillis() < System.currentTimeMillis()){
+            // the time is passed
+            calendar.add(Calendar.DATE, 1);
+            delay = true;
+        }
+
         alarmManager.setInexactRepeating(
                 AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY,
                 intent
         );
+        return delay;
     }
 
     private static void cancelAlarm(Context context, PendingIntent intent){
@@ -50,8 +60,8 @@ public class AlarmUtil {
         // cancel previous alarm
         cancelAlarm(context, pendingIntent);
         Time startTime = SettingUtil.getStartTime(context);
-        setUserDetectorAlarm(context, startTime);
-        setIntervalDayAlarm(context, pendingIntent, startTime);
+        boolean isDelayed = setUserDetectorAlarm(context, startTime);
+        setIntervalDayAlarm(context, pendingIntent, startTime, isDelayed);
     }
 
     public static void setEndAlarm(Context context){
@@ -65,10 +75,10 @@ public class AlarmUtil {
         );
         // cancel previous alarm
         cancelAlarm(context, pendingIntent);
-        setIntervalDayAlarm(context, pendingIntent, SettingUtil.getEndTime(context));
+        setIntervalDayAlarm(context, pendingIntent, SettingUtil.getEndTime(context), false);
     }
 
-    private static void setUserDetectorAlarm(Context context, Time startTime){
+    private static boolean setUserDetectorAlarm(Context context, Time startTime){
         Time startDetectorTime;
         if (startTime.getMinute() > 30)
             startDetectorTime = new Time(startTime.getHour(), startTime.getMinute());
@@ -87,7 +97,7 @@ public class AlarmUtil {
                 0
         );
         cancelAlarm(context, pendingIntent);
-        setIntervalDayAlarm(context, pendingIntent, startDetectorTime);
+        return setIntervalDayAlarm(context, pendingIntent, startDetectorTime, false);
     }
 
     public static void setAlarm(Context context, PendingIntent intent, long time){
