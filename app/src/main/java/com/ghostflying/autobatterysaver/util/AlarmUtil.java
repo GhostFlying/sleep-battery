@@ -43,7 +43,7 @@ public class AlarmUtil {
         return delay;
     }
 
-    private static void cancelAlarm(Context context, PendingIntent intent){
+    public static void cancelAlarm(Context context, PendingIntent intent){
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(intent);
     }

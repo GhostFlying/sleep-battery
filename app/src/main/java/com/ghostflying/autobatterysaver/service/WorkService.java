@@ -24,6 +24,7 @@ import java.util.Date;
 public class WorkService extends IntentService {
     public static final String ACTION_START = BuildConfig.APPLICATION_ID + ".START_SLEEP";
     public static final String ACTION_STOP = BuildConfig.APPLICATION_ID + ".STOP_SLEEP";
+    public static final String ACTION_START_DELAY = BuildConfig.APPLICATION_ID + ".START_SLEEP_DELAY";
 
     private static final long USER_INACTIVITY_THRESHOLD = 1L * 60L * 1000L;
     private static final long DELAYED_TIME_MILLISECONDS = 1L * 60L * 1000L;
@@ -41,7 +42,8 @@ public class WorkService extends IntentService {
             Log.d(TAG, "Received intent: " + intent.toString());
         }
         if (intent != null) {
-            if (ACTION_START.equals(intent.getAction())) {
+            if (ACTION_START.equals(intent.getAction())
+                    || ACTION_START_DELAY.equals(intent.getAction())) {
                 enableSleepModeIfNeeded();
             }
             else if (ACTION_STOP.equals(intent.getAction())){
@@ -54,6 +56,7 @@ public class WorkService extends IntentService {
         if (BuildConfig.DEBUG){
             Log.d(TAG, "disable sleep mode");
         }
+        cancelAllDelayedAlarm();
         setAirplaneMode(false);
         setBatterySaverMode(false);
     }
@@ -61,8 +64,15 @@ public class WorkService extends IntentService {
     private void enableSleepModeIfNeeded() {
         PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         Date lastScreenOffTime = UserDetectorService.lastScreenOffTime;
+        if (lastScreenOffTime == null){
+            // the detector do not run, it should only happen when the user change the start time
+            // between detector time and start time.
+            if (BuildConfig.DEBUG){
+                Log.d(TAG, "The detector do not run.");
+            }
+            return;
+        }
         if (manager.isInteractive()
-                || lastScreenOffTime == null // this should not happen
                 || (new Date().getTime() - lastScreenOffTime.getTime()) < USER_INACTIVITY_THRESHOLD) {
             // screen is on or the user use the device before little time..
             if (BuildConfig.DEBUG){
@@ -92,15 +102,23 @@ public class WorkService extends IntentService {
 
     private void setDelayedAlarm() {
         long runTime = new Date().getTime() + DELAYED_TIME_MILLISECONDS;
+        PendingIntent pendingIntent = getDelayedPendingIntent();
+        AlarmUtil.setAlarm(this, pendingIntent, runTime);
+    }
+
+    private PendingIntent getDelayedPendingIntent() {
         Intent workIntent = new Intent(this, WorkService.class);
-        workIntent.setAction(ACTION_START);
-        PendingIntent pendingIntent = PendingIntent.getService(
+        workIntent.setAction(ACTION_START_DELAY);
+        return PendingIntent.getService(
                 this,
                 START_INTENT_REQUEST_CODE,
                 workIntent,
                 0
         );
-        AlarmUtil.setAlarm(this, pendingIntent, runTime);
+    }
+
+    private void cancelAllDelayedAlarm(){
+        AlarmUtil.cancelAlarm(this, getDelayedPendingIntent());
     }
 
     private void setBatterySaverMode(boolean mode) {
