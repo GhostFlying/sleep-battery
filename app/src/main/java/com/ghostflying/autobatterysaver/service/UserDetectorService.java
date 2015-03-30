@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.ghostflying.autobatterysaver.BuildConfig;
 import com.ghostflying.autobatterysaver.R;
+import com.ghostflying.autobatterysaver.receiver.AlarmReceiver;
 
 import java.util.Date;
 
@@ -36,6 +37,12 @@ public class UserDetectorService extends Service {
         lastScreenOffTime = new Date();
         registerScreenOffReceiver();
         setForeground();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        AlarmReceiver.completeWakefulIntent(intent);
+        return START_STICKY;
     }
 
     private void setForeground() {

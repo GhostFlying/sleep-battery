@@ -9,6 +9,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.ghostflying.autobatterysaver.BuildConfig;
+import com.ghostflying.autobatterysaver.receiver.AlarmReceiver;
 import com.ghostflying.autobatterysaver.util.AirplaneModeUtil;
 import com.ghostflying.autobatterysaver.util.AlarmUtil;
 import com.ghostflying.autobatterysaver.util.BatterySaverModeUtil;
@@ -18,10 +19,6 @@ import com.ghostflying.autobatterysaver.util.WorkingMode;
 import java.util.Date;
 
 public class WorkService extends IntentService {
-    public static final String ACTION_START = BuildConfig.APPLICATION_ID + ".START_SLEEP";
-    public static final String ACTION_STOP = BuildConfig.APPLICATION_ID + ".STOP_SLEEP";
-    public static final String ACTION_START_DELAY = BuildConfig.APPLICATION_ID + ".START_SLEEP_DELAY";
-
     private static final long USER_INACTIVITY_THRESHOLD = 1L * 60L * 1000L;
     private static final long DELAYED_TIME_MILLISECONDS = 1L * 60L * 1000L;
     private static final int START_INTENT_REQUEST_CODE = 1;
@@ -38,14 +35,15 @@ public class WorkService extends IntentService {
             Log.d(TAG, "Received intent: " + intent.toString());
         }
         if (intent != null) {
-            if (ACTION_START.equals(intent.getAction())
-                    || ACTION_START_DELAY.equals(intent.getAction())) {
+            if (AlarmReceiver.ACTION_START.equals(intent.getAction())
+                    || AlarmReceiver.ACTION_START_DELAY.equals(intent.getAction())) {
                 enableSleepModeIfNeeded();
             }
-            else if (ACTION_STOP.equals(intent.getAction())){
+            else if (AlarmReceiver.ACTION_STOP.equals(intent.getAction())){
                 disableSleepModeIfNeeded();
             }
         }
+        AlarmReceiver.completeWakefulIntent(intent);
     }
 
     private void disableSleepModeIfNeeded(){
@@ -96,9 +94,9 @@ public class WorkService extends IntentService {
     }
 
     private PendingIntent getDelayedPendingIntent() {
-        Intent workIntent = new Intent(this, WorkService.class);
-        workIntent.setAction(ACTION_START_DELAY);
-        return PendingIntent.getService(
+        Intent workIntent = new Intent(this, AlarmReceiver.class);
+        workIntent.setAction(AlarmReceiver.ACTION_START_DELAY);
+        return PendingIntent.getBroadcast(
                 this,
                 START_INTENT_REQUEST_CODE,
                 workIntent,

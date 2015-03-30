@@ -6,8 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.ghostflying.autobatterysaver.model.Time;
-import com.ghostflying.autobatterysaver.service.UserDetectorService;
-import com.ghostflying.autobatterysaver.service.WorkService;
+import com.ghostflying.autobatterysaver.receiver.AlarmReceiver;
 
 import java.util.Calendar;
 
@@ -80,29 +79,30 @@ public class AlarmUtil {
 
         userDetectorAlarmTime = startAlarmTime - USER_DETECTOR_BEFORE_TIME_IN_MILLISECONDS;
 
-        Intent userDetectorIntent = new Intent(context, UserDetectorService.class);
+        Intent userDetectorIntent = new Intent(context, AlarmReceiver.class);
+        userDetectorIntent.setAction(AlarmReceiver.ACTION_START_DETECTOR);
         PendingIntent userDetectorPending =
-                PendingIntent.getService(
+                PendingIntent.getBroadcast(
                         context,
                         USER_DETECTOR_PENDING_REQUEST_ID,
                         userDetectorIntent,
                         0
                 );
 
-        Intent startIntent = new Intent(context, WorkService.class);
-        startIntent.setAction(WorkService.ACTION_START);
+        Intent startIntent = new Intent(context, AlarmReceiver.class);
+        startIntent.setAction(AlarmReceiver.ACTION_START);
         PendingIntent startPending =
-                PendingIntent.getService(
+                PendingIntent.getBroadcast(
                         context,
                         START_ACTION_PENDING_REQUEST_ID,
                         startIntent,
                         0
                 );
 
-        Intent endIntent = new Intent(context, WorkService.class);
-        endIntent.setAction(WorkService.ACTION_STOP);
+        Intent endIntent = new Intent(context, AlarmReceiver.class);
+        endIntent.setAction(AlarmReceiver.ACTION_STOP);
         PendingIntent endPending =
-                PendingIntent.getService(
+                PendingIntent.getBroadcast(
                         context,
                         STOP_ACTION_PENDING_REQUEST_ID,
                         endIntent,
