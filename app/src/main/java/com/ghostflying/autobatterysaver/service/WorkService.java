@@ -1,7 +1,6 @@
 package com.ghostflying.autobatterysaver.service;
 
 import android.app.IntentService;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
@@ -21,7 +20,6 @@ import java.util.Date;
 public class WorkService extends IntentService {
     private static final long USER_INACTIVITY_THRESHOLD = 1L * 60L * 1000L;
     private static final long DELAYED_TIME_MILLISECONDS = 1L * 60L * 1000L;
-    private static final int START_INTENT_REQUEST_CODE = 1;
 
     private static final String TAG = "WorkService";
 
@@ -89,23 +87,11 @@ public class WorkService extends IntentService {
 
     private void setDelayedAlarm() {
         long runTime = new Date().getTime() + DELAYED_TIME_MILLISECONDS;
-        PendingIntent pendingIntent = getDelayedPendingIntent();
-        AlarmUtil.setAlarm(this, pendingIntent, runTime);
-    }
-
-    private PendingIntent getDelayedPendingIntent() {
-        Intent workIntent = new Intent(this, AlarmReceiver.class);
-        workIntent.setAction(AlarmReceiver.ACTION_START_DELAY);
-        return PendingIntent.getBroadcast(
-                this,
-                START_INTENT_REQUEST_CODE,
-                workIntent,
-                0
-        );
+        AlarmUtil.setDelayedAlarm(this, runTime);
     }
 
     private void cancelAllDelayedAlarm(){
-        AlarmUtil.cancelAlarm(this, getDelayedPendingIntent());
+        AlarmUtil.cancelAllDelayedAlarm(this);
     }
 
     private void setBatterySaverMode(boolean mode) {

@@ -139,9 +139,19 @@ public class MainActivity extends ActionBarActivity
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SettingUtil.setEnable(MainActivity.this, isChecked);
                 setOverlay(isChecked);
+                setAlarm(isChecked);
             }
         });
         return true;
+    }
+
+    private void setAlarm(boolean isEnable){
+        if (isEnable){
+            AlarmUtil.setSleepModeAlarm(this);
+        }
+        else {
+            AlarmUtil.cancelAllAlarm(this);
+        }
     }
 
     private void setOverlay(boolean isEnable) {

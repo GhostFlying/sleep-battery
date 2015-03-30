@@ -17,6 +17,7 @@ public class AlarmUtil {
     private static final int START_ACTION_PENDING_REQUEST_ID = 10;
     private static final int STOP_ACTION_PENDING_REQUEST_ID = 20;
     private static final int USER_DETECTOR_PENDING_REQUEST_ID = 30;
+    private static final int START_INTENT_REQUEST_CODE = 40;
     private static final long USER_DETECTOR_BEFORE_TIME_IN_MILLISECONDS = 15L * 60L * 1000L;
 
     private static void setIntervalDayAlarm(Context context, PendingIntent intent, long time){
@@ -79,35 +80,11 @@ public class AlarmUtil {
 
         userDetectorAlarmTime = startAlarmTime - USER_DETECTOR_BEFORE_TIME_IN_MILLISECONDS;
 
-        Intent userDetectorIntent = new Intent(context, AlarmReceiver.class);
-        userDetectorIntent.setAction(AlarmReceiver.ACTION_START_DETECTOR);
-        PendingIntent userDetectorPending =
-                PendingIntent.getBroadcast(
-                        context,
-                        USER_DETECTOR_PENDING_REQUEST_ID,
-                        userDetectorIntent,
-                        0
-                );
+        PendingIntent userDetectorPending = getUserDetectorPendingIntent(context);
 
-        Intent startIntent = new Intent(context, AlarmReceiver.class);
-        startIntent.setAction(AlarmReceiver.ACTION_START);
-        PendingIntent startPending =
-                PendingIntent.getBroadcast(
-                        context,
-                        START_ACTION_PENDING_REQUEST_ID,
-                        startIntent,
-                        0
-                );
+        PendingIntent startPending = getStartPendingIntent(context);
 
-        Intent endIntent = new Intent(context, AlarmReceiver.class);
-        endIntent.setAction(AlarmReceiver.ACTION_STOP);
-        PendingIntent endPending =
-                PendingIntent.getBroadcast(
-                        context,
-                        STOP_ACTION_PENDING_REQUEST_ID,
-                        endIntent,
-                        0
-                );
+        PendingIntent endPending = getEndPendingIntent(context);
 
         //cancel exist alarm
         cancelAlarm(context, userDetectorPending);
@@ -117,5 +94,64 @@ public class AlarmUtil {
         setIntervalDayAlarm(context, userDetectorPending, userDetectorAlarmTime);
         setIntervalDayAlarm(context, startPending, startAlarmTime);
         setIntervalDayAlarm(context, endPending, endAlarmTime);
+    }
+
+    public static void setDelayedAlarm(Context context, long time){
+        setAlarm(context, getDelayedPendingIntent(context), time);
+    }
+
+    public static void cancelAllDelayedAlarm(Context context){
+        cancelAlarm(context, getDelayedPendingIntent(context));
+    }
+
+    public static void cancelAllAlarm(Context context){
+        cancelAlarm(context, getUserDetectorPendingIntent(context));
+        cancelAlarm(context, getStartPendingIntent(context));
+        cancelAlarm(context, getEndPendingIntent(context));
+        cancelAlarm(context, getDelayedPendingIntent(context));
+    }
+
+    private static PendingIntent getEndPendingIntent(Context context) {
+        Intent endIntent = new Intent(context, AlarmReceiver.class);
+        endIntent.setAction(AlarmReceiver.ACTION_STOP);
+        return PendingIntent.getBroadcast(
+                context,
+                STOP_ACTION_PENDING_REQUEST_ID,
+                endIntent,
+                0
+        );
+    }
+
+    private static PendingIntent getStartPendingIntent(Context context) {
+        Intent startIntent = new Intent(context, AlarmReceiver.class);
+        startIntent.setAction(AlarmReceiver.ACTION_START);
+        return PendingIntent.getBroadcast(
+                context,
+                START_ACTION_PENDING_REQUEST_ID,
+                startIntent,
+                0
+        );
+    }
+
+    private static PendingIntent getUserDetectorPendingIntent(Context context) {
+        Intent userDetectorIntent = new Intent(context, AlarmReceiver.class);
+        userDetectorIntent.setAction(AlarmReceiver.ACTION_START_DETECTOR);
+        return PendingIntent.getBroadcast(
+                context,
+                USER_DETECTOR_PENDING_REQUEST_ID,
+                userDetectorIntent,
+                0
+        );
+    }
+
+    private static PendingIntent getDelayedPendingIntent(Context context) {
+        Intent delayedIntent = new Intent(context, AlarmReceiver.class);
+        delayedIntent.setAction(AlarmReceiver.ACTION_START_DELAY);
+        return PendingIntent.getBroadcast(
+                context,
+                START_INTENT_REQUEST_CODE,
+                delayedIntent,
+                0
+        );
     }
 }
