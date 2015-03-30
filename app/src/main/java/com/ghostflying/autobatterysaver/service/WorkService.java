@@ -18,8 +18,8 @@ import com.ghostflying.autobatterysaver.util.WorkingMode;
 import java.util.Date;
 
 public class WorkService extends IntentService {
-    private static final long USER_INACTIVITY_THRESHOLD = 1L * 60L * 1000L;
-    private static final long DELAYED_TIME_MILLISECONDS = 1L * 60L * 1000L;
+    private static final long USER_INACTIVITY_THRESHOLD = 15L * 60L * 1000L;
+    private static final long DELAYED_TIME_MILLISECONDS = 20L * 60L * 1000L;
 
     private static final String TAG = "WorkService";
 
