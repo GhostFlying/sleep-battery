@@ -54,6 +54,13 @@ public class WorkService extends IntentService {
     }
 
     private void enableSleepModeIfNeeded() {
+        if (!SettingUtil.isTodayAvailable(this)){
+            if (BuildConfig.DEBUG){
+                Log.d(TAG, "Today is not available, just skip.");
+            }
+            return;
+        }
+
         PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         Date lastScreenOffTime = UserDetectorService.lastScreenOffTime;
         if (manager.isInteractive()

@@ -204,6 +204,7 @@ public class MainActivity extends ActionBarActivity
         } else if (title == R.string.days_choose_dialog_title) {
             SettingUtil.setAvailableDays(this, value.getBooleanArray(ChooseDialogFragment.ARG_ITEM_CHECKED));
             setAvailableDays();
+            AlarmUtil.setSleepModeAlarm(this);
         }
     }
 

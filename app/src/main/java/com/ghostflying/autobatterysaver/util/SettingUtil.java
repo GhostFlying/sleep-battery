@@ -7,7 +7,9 @@ import com.ghostflying.autobatterysaver.model.Time;
 
 import java.text.DateFormatSymbols;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 /**
@@ -107,6 +109,15 @@ public class SettingUtil {
             }
         }
         return result;
+    }
+
+    public static Set<String> getAvailableDaysName(Context context){
+        return getPreferences(context).getStringSet(SETTING_AVAILABLE_DAYS, DEFAULT_AVAILABLE_DAYS);
+    }
+
+    public static boolean isTodayAvailable(Context context){
+        String dayOfWeek = Calendar.getInstance().getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+        return getAvailableDaysName(context).contains(dayOfWeek);
     }
 
     public static void setAvailableDays(Context context, boolean[] available){

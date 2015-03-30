@@ -7,6 +7,8 @@ import android.content.Intent;
 
 import com.ghostflying.autobatterysaver.model.Time;
 import com.ghostflying.autobatterysaver.receiver.AlarmReceiver;
+import com.ghostflying.autobatterysaver.service.UserDetectorService;
+import com.ghostflying.autobatterysaver.service.WorkService;
 
 import java.util.Calendar;
 
@@ -91,9 +93,17 @@ public class AlarmUtil {
         cancelAlarm(context, startPending);
         cancelAlarm(context, endPending);
 
+        //stop running service
+        stopRunningService(context);
+
         setIntervalDayAlarm(context, userDetectorPending, userDetectorAlarmTime);
         setIntervalDayAlarm(context, startPending, startAlarmTime);
         setIntervalDayAlarm(context, endPending, endAlarmTime);
+    }
+
+    private static void stopRunningService(Context context) {
+        context.stopService(new Intent(context, UserDetectorService.class));
+        context.stopService(new Intent(context, WorkService.class));
     }
 
     public static void setDelayedAlarm(Context context, long time){
@@ -109,6 +119,7 @@ public class AlarmUtil {
         cancelAlarm(context, getStartPendingIntent(context));
         cancelAlarm(context, getEndPendingIntent(context));
         cancelAlarm(context, getDelayedPendingIntent(context));
+        stopRunningService(context);
     }
 
     private static PendingIntent getEndPendingIntent(Context context) {

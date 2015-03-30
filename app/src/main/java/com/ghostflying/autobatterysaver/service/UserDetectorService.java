@@ -12,6 +12,7 @@ import android.util.Log;
 import com.ghostflying.autobatterysaver.BuildConfig;
 import com.ghostflying.autobatterysaver.R;
 import com.ghostflying.autobatterysaver.receiver.AlarmReceiver;
+import com.ghostflying.autobatterysaver.util.SettingUtil;
 
 import java.util.Date;
 
@@ -19,6 +20,7 @@ public class UserDetectorService extends Service {
     private static final int ONGOING_NOTIFICATION_ID = 1;
     private static final String TAG = "UserDetectorService";
 
+    private boolean isAvailable = true;
     public static Date lastScreenOffTime;
 
     public UserDetectorService() {
@@ -34,14 +36,26 @@ public class UserDetectorService extends Service {
         if (BuildConfig.DEBUG){
             Log.d(TAG, "User detector is on");
         }
-        lastScreenOffTime = new Date();
-        registerScreenOffReceiver();
-        setForeground();
+
+        if (SettingUtil.isTodayAvailable(this)){
+            lastScreenOffTime = new Date();
+            registerScreenOffReceiver();
+            setForeground();
+        }
+        else {
+            if (BuildConfig.DEBUG){
+                Log.d(TAG, "Today is not available, just skip.");
+            }
+            isAvailable = false;
+        }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         AlarmReceiver.completeWakefulIntent(intent);
+        if (!isAvailable){
+            stopSelf();
+        }
         return START_STICKY;
     }
 
@@ -74,8 +88,10 @@ public class UserDetectorService extends Service {
         if (BuildConfig.DEBUG){
             Log.d(TAG, "User detector is off");
         }
-        lastScreenOffTime = null;
-        stopForeground(true);
-        unregisterReceiver(mScreenOffReceiver);
+        if (isAvailable){
+            lastScreenOffTime = null;
+            stopForeground(true);
+            unregisterReceiver(mScreenOffReceiver);
+        }
     }
 }
