@@ -22,12 +22,12 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         if (intent != null){
             if (ACTION_START_DETECTOR.equals(intent.getAction())){
                 Intent serviceIntent = new Intent(context, UserDetectorService.class);
-                context.startService(serviceIntent);
+                startWakefulService(context, serviceIntent);
             }
             else {
                 Intent serviceIntent = new Intent(context, WorkService.class);
                 serviceIntent.setAction(intent.getAction());
-                context.startService(serviceIntent);
+                startWakefulService(context, serviceIntent);
             }
         }
     }
