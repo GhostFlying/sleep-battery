@@ -23,38 +23,6 @@
     <string name="setting_snooze">Snooze if device is active</string>
     <string name="setting_available_days">Available days</string>
     <string name="day_none">None</string>
-    <string name="day_monday">Monday</string>
-    <string name="day_tuesday">Tuesday</string>
-    <string name="day_wednesday">Wednesday</string>
-    <string name="day_thursday">Thursday</string>
-    <string name="day_friday">Friday</string>
-    <string name="day_saturday">Saturday</string>
-    <string name="day_sunday">Sunday</string>
-    <string-array name="days_array">
-        <item>@string/day_sunday</item>
-        <item>@string/day_monday</item>
-        <item>@string/day_tuesday</item>
-        <item>@string/day_wednesday</item>
-        <item>@string/day_thursday</item>
-        <item>@string/day_friday</item>
-        <item>@string/day_saturday</item>
-    </string-array>
-    <string name="short_day_monday">Mon</string>
-    <string name="short_day_tuesday">Tue</string>
-    <string name="short_day_wednesday">Wed</string>
-    <string name="short_day_thursday">Thu</string>
-    <string name="short_day_friday">Fri</string>
-    <string name="short_day_saturday">Sat</string>
-    <string name="short_day_sunday">Sun</string>
-    <string-array name="short_days_array">
-        <item>@string/short_day_sunday</item>
-        <item>@string/short_day_monday</item>
-        <item>@string/short_day_tuesday</item>
-        <item>@string/short_day_wednesday</item>
-        <item>@string/short_day_thursday</item>
-        <item>@string/short_day_friday</item>
-        <item>@string/short_day_saturday</item>
-    </string-array>
 
     <string name="positive_button">@android:string/ok</string>
     <string name="negative_button">@android:string/cancel</string>

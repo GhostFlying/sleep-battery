@@ -20,6 +20,7 @@ public class ChooseDialogFragment extends BaseAlertDialogFragment {
 
     private int mTitle;
     private int mItems;
+    private String[] mStringItems;
     private int mChecked;
     private boolean[] mCheckedArray;
     private boolean isMulti;
@@ -28,7 +29,7 @@ public class ChooseDialogFragment extends BaseAlertDialogFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param title the resoucce id of the title of the dialog.
+     * @param title the resource id of the title of the dialog.
      * @param items the resource id of items to choose.
      * @return A new instance of fragment SingleChooseDialogFragment.
      */
@@ -43,11 +44,11 @@ public class ChooseDialogFragment extends BaseAlertDialogFragment {
         return fragment;
     }
 
-    public static ChooseDialogFragment newInstance(int title, int items, boolean[] checked){
+    public static ChooseDialogFragment newInstance(int title, String[] items, boolean[] checked){
         ChooseDialogFragment fragment = new ChooseDialogFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_TITLE, title);
-        args.putInt(ARG_ITEMS, items);
+        args.putStringArray(ARG_ITEMS, items);
         args.putBooleanArray(ARG_ITEM_CHECKED, checked);
         args.putBoolean(ARG_IS_MULTI, true);
         fragment.setArguments(args);
@@ -63,13 +64,14 @@ public class ChooseDialogFragment extends BaseAlertDialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mTitle = getArguments().getInt(ARG_TITLE);
-            mItems = getArguments().getInt(ARG_ITEMS);
             isMulti = getArguments().getBoolean(ARG_IS_MULTI);
             if (isMulti){
                 mCheckedArray = getArguments().getBooleanArray(ARG_ITEM_CHECKED);
+                mStringItems = getArguments().getStringArray(ARG_ITEMS);
             }
             else {
                 mChecked = getArguments().getInt(ARG_ITEM_CHECKED);
+                mItems = getArguments().getInt(ARG_ITEMS);
             }
         }
     }
@@ -99,7 +101,7 @@ public class ChooseDialogFragment extends BaseAlertDialogFragment {
                 });
 
         if (isMulti){
-            builder.setMultiChoiceItems(mItems, mCheckedArray, mOnMultiClickListener);
+            builder.setMultiChoiceItems(mStringItems, mCheckedArray, mOnMultiClickListener);
         }
         else {
             builder.setSingleChoiceItems(mItems, mChecked, onClickListener);

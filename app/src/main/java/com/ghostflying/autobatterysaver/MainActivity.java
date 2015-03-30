@@ -23,7 +23,8 @@ import com.ghostflying.autobatterysaver.util.AlarmUtil;
 import com.ghostflying.autobatterysaver.util.SettingUtil;
 import com.ghostflying.autobatterysaver.util.WorkingMode;
 
-import java.util.Map;
+import java.text.DateFormatSymbols;
+import java.util.Arrays;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -97,33 +98,20 @@ public class MainActivity extends ActionBarActivity
 
     private void setAvailableDays() {
         String resultText = null;
-        boolean[] availableArray = getAvailableDaysArray();
-        String[] shortDaysOfWeek = getResources().getStringArray(R.array.short_days_array);
+        boolean[] availableArray = SettingUtil.getAvailableDays(this);
+        String[] shortDaysOfWeek = DateFormatSymbols.getInstance().getShortWeekdays();
         for (int i = 0; i < availableArray.length; i++) {
             if (availableArray[i]) {
                 if (resultText == null) {
-                    resultText = shortDaysOfWeek[i];
+                    resultText = shortDaysOfWeek[i + 1];
                 } else {
-                    resultText += ", " + shortDaysOfWeek[i];
+                    resultText += ", " + shortDaysOfWeek[i + 1];
                 }
             }
         }
         if (resultText == null)
             resultText = getResources().getString(R.string.day_none);
         mAvailableDaysText.setText(resultText);
-    }
-
-    private boolean[] getAvailableDaysArray() {
-        Map<String, Boolean> availableDays = SettingUtil.getAvailableDays(this);
-        String[] daysOfWeek = getResources().getStringArray(R.array.days_array);
-        boolean[] result = new boolean[daysOfWeek.length];
-        for (int i = 0; i < daysOfWeek.length; i++) {
-            if (availableDays.get(daysOfWeek[i]))
-                result[i] = true;
-            else
-                result[i] = false;
-        }
-        return result;
     }
 
     @Override
@@ -189,8 +177,8 @@ public class MainActivity extends ActionBarActivity
                 DialogFragment dialogFragment1 = ChooseDialogFragment
                         .newInstance(
                                 R.string.days_choose_dialog_title,
-                                R.array.days_array,
-                                getAvailableDaysArray()
+                                Arrays.copyOfRange(DateFormatSymbols.getInstance().getWeekdays(), 1, 8),
+                                SettingUtil.getAvailableDays(this)
                         );
                 dialogFragment1.show(getFragmentManager(), null);
                 break;

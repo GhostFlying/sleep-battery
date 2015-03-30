@@ -3,11 +3,12 @@ package com.ghostflying.autobatterysaver.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.ghostflying.autobatterysaver.R;
 import com.ghostflying.autobatterysaver.model.Time;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.text.DateFormatSymbols;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Ghost on 3/24/2015.
@@ -21,7 +22,7 @@ public class SettingUtil {
     private static final String SETTING_END_TIME_HOUR_NAME = "EndTimeHour";
     private static final String SETTING_END_TIME_MINUTE_NAME = "EndTimeMinute";
     private static final String SETTING_WORKING_MODE_NAME = "WorkingMode";
-    private static final String SETTING_AVAILABLE_DAYS_SUFFIX = "/Available";
+    private static final String SETTING_AVAILABLE_DAYS = "AvailableDays";
 
     private static final boolean DEFAULT_ENABLE = false;
     private static final boolean DEFAULT_SNOOZE_IF_ACTIVE = true;
@@ -30,7 +31,10 @@ public class SettingUtil {
     private static final int DEFAULT_END_TIME_HOUR = 8;
     private static final int DEFAULT_END_TIME_MINUTE = 0;
     private static final String DEFAULT_WORKING_MODE = WorkingMode.BATTERY_SAVER.name();
-    private static final boolean DEFAULT_DAYS_AVAILABLE = true;
+    private static final Set<String> DEFAULT_AVAILABLE_DAYS =
+            new HashSet<>(
+                    Arrays.asList(DateFormatSymbols.getInstance().getWeekdays())
+            );
 
     public static boolean isEnable(Context context){
         return getPreferences(context).getBoolean(SETTING_ENABLE_NAME, DEFAULT_ENABLE);
@@ -86,33 +90,35 @@ public class SettingUtil {
         getEditor(context).putString(SETTING_WORKING_MODE_NAME, mode.name()).apply();
     }
 
-    public static Map<String, Boolean> getAvailableDays(Context context){
-        Map<String, Boolean> days = new HashMap<>();
-        String[] daysOfWeek = context.getResources().getStringArray(R.array.days_array);
+    public static boolean[] getAvailableDays(Context context){
         SharedPreferences preferences = getPreferences(context);
-        for (int i = 0; i < daysOfWeek.length; i++){
-            //use for to hold the order
-            days.put(
-                    daysOfWeek[i],
-                    preferences.getBoolean(
-                            daysOfWeek[i] + SETTING_AVAILABLE_DAYS_SUFFIX,
-                            DEFAULT_DAYS_AVAILABLE
-                    )
-            );
+        Set<String> availableDays = preferences.getStringSet(
+                SETTING_AVAILABLE_DAYS,
+                DEFAULT_AVAILABLE_DAYS
+        );
+        boolean[] result = new boolean[7];
+        String[] dayOfWeeks = DateFormatSymbols.getInstance().getWeekdays();
+        for (int i = 0; i < result.length; i++){
+            if (availableDays.contains(dayOfWeeks[i + 1])){
+                result[i] = true;
+            }
+            else {
+                result[i] = false;
+            }
         }
-        return days;
+        return result;
     }
 
     public static void setAvailableDays(Context context, boolean[] available){
         SharedPreferences.Editor editor = getEditor(context);
-        String[] daysOfWeek = context.getResources().getStringArray(R.array.days_array);
-        for (int i = 0; i < daysOfWeek.length; i++){
-            //use for to hold the order
-            editor.putBoolean(
-                    daysOfWeek[i] + SETTING_AVAILABLE_DAYS_SUFFIX,
-                    available[i]
-            );
+        Set<String> availableDays = new HashSet<>();
+        String[] dayOfWeeks = DateFormatSymbols.getInstance().getWeekdays();
+        for (int i = 0; i < available.length; i++){
+            if (available[i]){
+                availableDays.add(dayOfWeeks[i + 1]);
+            }
         }
+        editor.putStringSet(SETTING_AVAILABLE_DAYS, availableDays);
         editor.apply();
     }
 
