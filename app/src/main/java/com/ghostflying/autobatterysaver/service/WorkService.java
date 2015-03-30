@@ -1,24 +1,20 @@
 package com.ghostflying.autobatterysaver.service;
 
-import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 
 import com.ghostflying.autobatterysaver.BuildConfig;
-import com.ghostflying.autobatterysaver.model.Time;
 import com.ghostflying.autobatterysaver.util.AirplaneModeUtil;
 import com.ghostflying.autobatterysaver.util.AlarmUtil;
 import com.ghostflying.autobatterysaver.util.BatterySaverModeUtil;
 import com.ghostflying.autobatterysaver.util.SettingUtil;
 import com.ghostflying.autobatterysaver.util.WorkingMode;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class WorkService extends IntentService {
@@ -64,15 +60,8 @@ public class WorkService extends IntentService {
     private void enableSleepModeIfNeeded() {
         PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         Date lastScreenOffTime = UserDetectorService.lastScreenOffTime;
-        if (lastScreenOffTime == null){
-            // the detector do not run, it should only happen when the user change the start time
-            // between detector time and start time.
-            if (BuildConfig.DEBUG){
-                Log.d(TAG, "The detector do not run.");
-            }
-            return;
-        }
         if (manager.isInteractive()
+                || lastScreenOffTime == null // iff the alarm set during the sleep time
                 || (new Date().getTime() - lastScreenOffTime.getTime()) < USER_INACTIVITY_THRESHOLD) {
             // screen is on or the user use the device before little time..
             if (BuildConfig.DEBUG){

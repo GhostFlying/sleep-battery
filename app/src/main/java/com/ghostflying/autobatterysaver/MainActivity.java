@@ -1,10 +1,6 @@
 package com.ghostflying.autobatterysaver;
 
-import android.app.AlarmManager;
 import android.app.DialogFragment;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SwitchCompat;
@@ -23,13 +19,10 @@ import com.ghostflying.autobatterysaver.fragment.ChooseDialogFragment;
 import com.ghostflying.autobatterysaver.fragment.EndTimePicker;
 import com.ghostflying.autobatterysaver.fragment.StartTimePicker;
 import com.ghostflying.autobatterysaver.model.Time;
-import com.ghostflying.autobatterysaver.service.UserDetectorService;
-import com.ghostflying.autobatterysaver.service.WorkService;
 import com.ghostflying.autobatterysaver.util.AlarmUtil;
 import com.ghostflying.autobatterysaver.util.SettingUtil;
 import com.ghostflying.autobatterysaver.util.WorkingMode;
 
-import java.util.Calendar;
 import java.util.Map;
 
 import butterknife.ButterKnife;
@@ -202,8 +195,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onTimeSet(Time time) {
         setTime();
-        AlarmUtil.setStartAlarm(this);
-        AlarmUtil.setEndAlarm(this);
+        AlarmUtil.setSleepModeAlarm(this);
     }
 
     @Override
