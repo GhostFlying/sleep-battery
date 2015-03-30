@@ -61,17 +61,19 @@ public class WorkService extends IntentService {
             return;
         }
 
-        PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        Date lastScreenOffTime = UserDetectorService.lastScreenOffTime;
-        if (manager.isInteractive()
-                || lastScreenOffTime == null // iff the alarm set during the sleep time
-                || (new Date().getTime() - lastScreenOffTime.getTime()) < USER_INACTIVITY_THRESHOLD) {
-            // screen is on or the user use the device before little time..
-            if (BuildConfig.DEBUG){
-                Log.d(TAG, "user is active");
+        if (SettingUtil.isSnoozeIfActive(this)){
+            PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            Date lastScreenOffTime = UserDetectorService.lastScreenOffTime;
+            if (manager.isInteractive()
+                    || lastScreenOffTime == null // iff the alarm set during the sleep time
+                    || (new Date().getTime() - lastScreenOffTime.getTime()) < USER_INACTIVITY_THRESHOLD) {
+                // screen is on or the user use the device before little time..
+                if (BuildConfig.DEBUG){
+                    Log.d(TAG, "user is active");
+                }
+                setDelayedAlarm();
+                return;
             }
-            setDelayedAlarm();
-            return;
         }
 
         if (BuildConfig.DEBUG){

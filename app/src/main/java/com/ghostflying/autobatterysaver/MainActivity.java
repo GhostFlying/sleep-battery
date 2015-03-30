@@ -188,6 +188,7 @@ public class MainActivity extends ActionBarActivity
     @OnCheckedChanged(R.id.snooze_if_active_checkbox)
     void onCheckBoxCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         SettingUtil.setSnoozeIfActive(this, isChecked);
+        AlarmUtil.setSleepModeAlarm(this);
     }
 
     @Override

@@ -96,7 +96,9 @@ public class AlarmUtil {
         //stop running service
         stopRunningService(context);
 
-        setIntervalDayAlarm(context, userDetectorPending, userDetectorAlarmTime);
+        if (SettingUtil.isSnoozeIfActive(context)){
+            setIntervalDayAlarm(context, userDetectorPending, userDetectorAlarmTime);
+        }
         setIntervalDayAlarm(context, startPending, startAlarmTime);
         setIntervalDayAlarm(context, endPending, endAlarmTime);
     }
