@@ -30,7 +30,7 @@
     <string name="days_choose_dialog_title">Available days</string>
 
     <!-- Service -->
-    <string name="notification_title">Sleep detector is running</string>
-    <string name="notification_content">This will exit if you go to sleep.</string>
+    <string name="notification_title">Sleep detector service is running</string>
+    <string name="notification_content">The service will exit automatically.</string>
 
 </resources>

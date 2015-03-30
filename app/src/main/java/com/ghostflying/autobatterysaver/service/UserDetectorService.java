@@ -62,6 +62,8 @@ public class UserDetectorService extends Service {
     private void setForeground() {
         Notification.Builder builder = new Notification.Builder(this);
         builder.setContentTitle(getString(R.string.notification_title))
+                .setContentText(getString(R.string.notification_content))
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setPriority(Notification.PRIORITY_MIN)
                 .setOngoing(true);
 
