@@ -4,7 +4,9 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
+import com.ghostflying.autobatterysaver.BuildConfig;
 import com.ghostflying.autobatterysaver.model.Time;
 import com.ghostflying.autobatterysaver.receiver.AlarmReceiver;
 import com.ghostflying.autobatterysaver.service.UserDetectorService;
@@ -21,6 +23,7 @@ public class AlarmUtil {
     private static final int USER_DETECTOR_PENDING_REQUEST_ID = 30;
     private static final int START_INTENT_REQUEST_CODE = 40;
     private static final long USER_DETECTOR_BEFORE_TIME_IN_MILLISECONDS = 15L * 60L * 1000L;
+    private static final String TAG = "AlarmUtil";
 
     private static void setIntervalDayAlarm(Context context, PendingIntent intent, long time){
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -47,7 +50,11 @@ public class AlarmUtil {
         );
     }
 
-    public static void setSleepModeAlarm(Context context){
+    public synchronized static void setSleepModeAlarm(Context context){
+        if (BuildConfig.DEBUG){
+            Log.d(TAG, "Start set sleep mode alarm.");
+        }
+
         long startAlarmTime;
         long endAlarmTime;
         long userDetectorAlarmTime;
@@ -96,6 +103,7 @@ public class AlarmUtil {
         //stop running service
         stopRunningService(context);
 
+        ThreadUtil.delayAlarmEnable = true;
         if (SettingUtil.isSnoozeIfActive(context)){
             setIntervalDayAlarm(context, userDetectorPending, userDetectorAlarmTime);
         }
@@ -104,19 +112,31 @@ public class AlarmUtil {
     }
 
     private static void stopRunningService(Context context) {
+        if (BuildConfig.DEBUG){
+            Log.d(TAG, "Start stop all service.");
+        }
+
         context.stopService(new Intent(context, UserDetectorService.class));
         context.stopService(new Intent(context, WorkService.class));
     }
 
-    public static void setDelayedAlarm(Context context, long time){
-        setAlarm(context, getDelayedPendingIntent(context), time);
+    public synchronized static void setDelayedAlarm(Context context, long time){
+        if (ThreadUtil.delayAlarmEnable)
+            setAlarm(context, getDelayedPendingIntent(context), time);
     }
 
-    public static void cancelAllDelayedAlarm(Context context){
+    public synchronized static void cancelAllDelayedAlarm(Context context){
         cancelAlarm(context, getDelayedPendingIntent(context));
     }
 
-    public static void cancelAllAlarm(Context context){
+    public synchronized static void cancelAllAlarm(Context context){
+        if (BuildConfig.DEBUG){
+            Log.d(TAG, "Start cancel all alarm.");
+        }
+
+        // the sync and the flag to make sure the service is stop correctly and
+        // not delay alarm is set.
+        ThreadUtil.delayAlarmEnable = false;
         cancelAlarm(context, getUserDetectorPendingIntent(context));
         cancelAlarm(context, getStartPendingIntent(context));
         cancelAlarm(context, getEndPendingIntent(context));
