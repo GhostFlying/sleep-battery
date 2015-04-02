@@ -1,7 +1,7 @@
-package com.ghostflying.autobatterysaver.fragment;
+package com.ghostflying.sleepbattery.fragment;
 
-import com.ghostflying.autobatterysaver.model.Time;
-import com.ghostflying.autobatterysaver.util.SettingUtil;
+import com.ghostflying.sleepbattery.model.Time;
+import com.ghostflying.sleepbattery.util.SettingUtil;
 
 /**
  * Created by ghostflying on 3/24/15.

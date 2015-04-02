@@ -1,4 +1,4 @@
-package com.ghostflying.autobatterysaver.service;
+package com.ghostflying.sleepbattery.service;
 
 import android.app.IntentService;
 import android.content.Context;
@@ -7,13 +7,13 @@ import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.ghostflying.autobatterysaver.BuildConfig;
-import com.ghostflying.autobatterysaver.receiver.AlarmReceiver;
-import com.ghostflying.autobatterysaver.util.AirplaneModeUtil;
-import com.ghostflying.autobatterysaver.util.AlarmUtil;
-import com.ghostflying.autobatterysaver.util.BatterySaverModeUtil;
-import com.ghostflying.autobatterysaver.util.SettingUtil;
-import com.ghostflying.autobatterysaver.util.WorkingMode;
+import com.ghostflying.sleepbattery.BuildConfig;
+import com.ghostflying.sleepbattery.receiver.AlarmReceiver;
+import com.ghostflying.sleepbattery.util.AirplaneModeUtil;
+import com.ghostflying.sleepbattery.util.AlarmUtil;
+import com.ghostflying.sleepbattery.util.BatterySaverModeUtil;
+import com.ghostflying.sleepbattery.util.SettingUtil;
+import com.ghostflying.sleepbattery.util.WorkingMode;
 
 import java.util.Date;
 

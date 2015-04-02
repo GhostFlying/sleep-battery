@@ -1,4 +1,4 @@
-package com.ghostflying.autobatterysaver.fragment;
+package com.ghostflying.sleepbattery.fragment;
 
 
 import android.app.Dialog;
@@ -7,7 +7,7 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.widget.TimePicker;
 
-import com.ghostflying.autobatterysaver.model.Time;
+import com.ghostflying.sleepbattery.model.Time;
 
 
 public abstract class BaseTimePickerDialog extends DialogFragment implements TimePickerDialog.OnTimeSetListener {

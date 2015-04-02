@@ -1,11 +1,11 @@
-package com.ghostflying.autobatterysaver.fragment;
+package com.ghostflying.sleepbattery.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import com.ghostflying.autobatterysaver.R;
+import com.ghostflying.sleepbattery.R;
 
 /**
  * Created by ghostflying on 3/24/15.

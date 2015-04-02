@@ -1,4 +1,4 @@
-package com.ghostflying.autobatterysaver.model;
+package com.ghostflying.sleepbattery.model;
 
 /**
  * Created by ghostflying on 3/24/15.

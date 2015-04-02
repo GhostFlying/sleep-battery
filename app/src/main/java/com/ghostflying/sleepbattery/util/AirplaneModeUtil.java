@@ -1,4 +1,4 @@
-package com.ghostflying.autobatterysaver.util;
+package com.ghostflying.sleepbattery.util;
 
 /**
  * Created by Ghost on 3/23/2015.

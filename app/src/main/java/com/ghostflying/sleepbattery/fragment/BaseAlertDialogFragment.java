@@ -1,4 +1,4 @@
-package com.ghostflying.autobatterysaver.fragment;
+package com.ghostflying.sleepbattery.fragment;
 
 import android.app.Activity;
 import android.app.DialogFragment;

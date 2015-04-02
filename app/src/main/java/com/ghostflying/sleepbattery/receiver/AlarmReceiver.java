@@ -1,12 +1,12 @@
-package com.ghostflying.autobatterysaver.receiver;
+package com.ghostflying.sleepbattery.receiver;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
-import com.ghostflying.autobatterysaver.BuildConfig;
-import com.ghostflying.autobatterysaver.service.UserDetectorService;
-import com.ghostflying.autobatterysaver.service.WorkService;
+import com.ghostflying.sleepbattery.BuildConfig;
+import com.ghostflying.sleepbattery.service.UserDetectorService;
+import com.ghostflying.sleepbattery.service.WorkService;
 
 public class AlarmReceiver extends WakefulBroadcastReceiver {
     public static final String ACTION_START = BuildConfig.APPLICATION_ID + ".START_SLEEP";

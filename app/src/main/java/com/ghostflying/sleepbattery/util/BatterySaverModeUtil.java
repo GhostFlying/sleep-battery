@@ -1,7 +1,4 @@
-package com.ghostflying.autobatterysaver.util;
-
-import java.io.DataOutputStream;
-import java.io.IOException;
+package com.ghostflying.sleepbattery.util;
 
 /**
  * Created by ghostflying on 3/22/15.

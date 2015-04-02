@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AutoBatterySaver</string>
+    <string name="app_name">Sleep Battery</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -20,7 +20,7 @@
         <item>@string/mode_airplane</item>
         <item>@string/mode_both</item>
     </string-array>
-    <string name="setting_snooze">Snooze if device is active</string>
+    <string name="setting_snooze">Snooze when active</string>
     <string name="setting_available_days">Available days</string>
     <string name="day_none">None</string>
 

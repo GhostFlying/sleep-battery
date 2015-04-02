@@ -1,4 +1,4 @@
-package com.ghostflying.autobatterysaver;
+package com.ghostflying.sleepbattery;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
@@ -13,15 +13,15 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.ghostflying.autobatterysaver.fragment.BaseAlertDialogFragment;
-import com.ghostflying.autobatterysaver.fragment.BaseTimePickerDialog;
-import com.ghostflying.autobatterysaver.fragment.ChooseDialogFragment;
-import com.ghostflying.autobatterysaver.fragment.EndTimePicker;
-import com.ghostflying.autobatterysaver.fragment.StartTimePicker;
-import com.ghostflying.autobatterysaver.model.Time;
-import com.ghostflying.autobatterysaver.util.AlarmUtil;
-import com.ghostflying.autobatterysaver.util.SettingUtil;
-import com.ghostflying.autobatterysaver.util.WorkingMode;
+import com.ghostflying.sleepbattery.fragment.BaseAlertDialogFragment;
+import com.ghostflying.sleepbattery.fragment.BaseTimePickerDialog;
+import com.ghostflying.sleepbattery.fragment.ChooseDialogFragment;
+import com.ghostflying.sleepbattery.fragment.EndTimePicker;
+import com.ghostflying.sleepbattery.fragment.StartTimePicker;
+import com.ghostflying.sleepbattery.model.Time;
+import com.ghostflying.sleepbattery.util.AlarmUtil;
+import com.ghostflying.sleepbattery.util.SettingUtil;
+import com.ghostflying.sleepbattery.util.WorkingMode;
 
 import java.text.DateFormatSymbols;
 import java.util.Arrays;

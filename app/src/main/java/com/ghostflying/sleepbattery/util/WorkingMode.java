@@ -1,6 +1,6 @@
-package com.ghostflying.autobatterysaver.util;
+package com.ghostflying.sleepbattery.util;
 
-import com.ghostflying.autobatterysaver.R;
+import com.ghostflying.sleepbattery.R;
 
 /**
  * Created by ghostflying on 3/24/15.

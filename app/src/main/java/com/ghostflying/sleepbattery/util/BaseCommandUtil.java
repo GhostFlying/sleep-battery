@@ -1,4 +1,4 @@
-package com.ghostflying.autobatterysaver.util;
+package com.ghostflying.sleepbattery.util;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

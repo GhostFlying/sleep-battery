@@ -1,9 +1,9 @@
-package com.ghostflying.autobatterysaver.util;
+package com.ghostflying.sleepbattery.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.ghostflying.autobatterysaver.model.Time;
+import com.ghostflying.sleepbattery.model.Time;
 
 import java.text.DateFormatSymbols;
 import java.util.Arrays;

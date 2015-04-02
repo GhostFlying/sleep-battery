@@ -1,4 +1,4 @@
-package com.ghostflying.autobatterysaver.service;
+package com.ghostflying.sleepbattery.service;
 
 import android.app.Notification;
 import android.app.Service;
@@ -9,10 +9,10 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.ghostflying.autobatterysaver.BuildConfig;
-import com.ghostflying.autobatterysaver.R;
-import com.ghostflying.autobatterysaver.receiver.AlarmReceiver;
-import com.ghostflying.autobatterysaver.util.SettingUtil;
+import com.ghostflying.sleepbattery.BuildConfig;
+import com.ghostflying.sleepbattery.R;
+import com.ghostflying.sleepbattery.receiver.AlarmReceiver;
+import com.ghostflying.sleepbattery.util.SettingUtil;
 
 import java.util.Date;
 

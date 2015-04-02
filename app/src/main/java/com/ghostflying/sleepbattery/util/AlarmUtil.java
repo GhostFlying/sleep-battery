@@ -1,4 +1,4 @@
-package com.ghostflying.autobatterysaver.util;
+package com.ghostflying.sleepbattery.util;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -6,11 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.ghostflying.autobatterysaver.BuildConfig;
-import com.ghostflying.autobatterysaver.model.Time;
-import com.ghostflying.autobatterysaver.receiver.AlarmReceiver;
-import com.ghostflying.autobatterysaver.service.UserDetectorService;
-import com.ghostflying.autobatterysaver.service.WorkService;
+import com.ghostflying.sleepbattery.BuildConfig;
+import com.ghostflying.sleepbattery.model.Time;
+import com.ghostflying.sleepbattery.receiver.AlarmReceiver;
+import com.ghostflying.sleepbattery.service.UserDetectorService;
+import com.ghostflying.sleepbattery.service.WorkService;
 
 import java.util.Calendar;
 

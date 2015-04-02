@@ -1,13 +1,13 @@
-package com.ghostflying.autobatterysaver.receiver;
+package com.ghostflying.sleepbattery.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.ghostflying.autobatterysaver.BuildConfig;
-import com.ghostflying.autobatterysaver.util.AlarmUtil;
-import com.ghostflying.autobatterysaver.util.SettingUtil;
+import com.ghostflying.sleepbattery.BuildConfig;
+import com.ghostflying.sleepbattery.util.AlarmUtil;
+import com.ghostflying.sleepbattery.util.SettingUtil;
 
 /**
  * Created by ghostflying on 3/31/15.
