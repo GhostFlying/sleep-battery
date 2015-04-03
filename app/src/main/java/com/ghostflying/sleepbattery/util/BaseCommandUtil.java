@@ -19,4 +19,8 @@ public class BaseCommandUtil {
             e.printStackTrace();
         }
     }
+
+    public static void requireRoot(){
+        runCommandWithRoot("");
+    }
 }

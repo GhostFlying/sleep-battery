@@ -20,6 +20,7 @@ import com.ghostflying.sleepbattery.fragment.EndTimePicker;
 import com.ghostflying.sleepbattery.fragment.StartTimePicker;
 import com.ghostflying.sleepbattery.model.Time;
 import com.ghostflying.sleepbattery.util.AlarmUtil;
+import com.ghostflying.sleepbattery.util.BaseCommandUtil;
 import com.ghostflying.sleepbattery.util.SettingUtil;
 import com.ghostflying.sleepbattery.util.WorkingMode;
 
@@ -136,6 +137,7 @@ public class MainActivity extends ActionBarActivity
     private void setAlarm(boolean isEnable){
         if (isEnable){
             AlarmUtil.setSleepModeAlarm(this);
+            BaseCommandUtil.requireRoot();
         }
         else {
             AlarmUtil.cancelAllAlarm(this);
